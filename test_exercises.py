@@ -8,7 +8,6 @@ def test_patient_constructor():
 
 def test_patient_add_test_exists():
     patient = Patient('Foo', ['cough'])
-
     patient.add_test('sars', False)
     patient.add_test('covid', False)
 
