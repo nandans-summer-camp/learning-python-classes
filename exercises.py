@@ -2,6 +2,32 @@
 # PART A: Patient
 ###########################################
 
+
+def _covid_prob(symptoms):
+    covid_list = ['cough', 'fever', 'anosmia']
+    prob = 0.05
+    for s in symptoms:
+        if s in covid_list:
+            prob += 0.10
+    return prob
+
+class Patient():
+    def __init__(self, name, symptoms):
+        self.name = name
+        self.symptoms = symptoms
+        self.tests = {}
+
+    def add_test(self, test_name, res):
+        self.tests[test_name] = res
+
+    def has_covid(self):
+        try:
+            if self.tests['covid']:
+                return 0.99
+            return 0.01
+        except KeyError:
+            return _covid_prob(self.symptoms)
+
 #
 # In this exercise we will make an "Patient" class
 #
@@ -57,6 +83,39 @@
 ###########################################
 # PART B: Encoder
 ###########################################
+
+
+class Encoder():
+    def __init__(self):
+        self.idx = 0
+        self.lookup = {}
+
+    def fit(self, items):
+        for item in items:
+            try:
+                self.lookup[item]
+            except KeyError:
+                self.lookup[item] = self.idx
+                self.idx += 1
+            except TypeError:
+                raise Exception('Encoder.encode() was passed elements that it cannot encode')
+
+    def export_mapping(self):
+        return self.lookup
+
+    def import_mapping(self, mapping):
+        self.lookup = mapping
+
+    def encode(self, items):
+        self.fit(items)
+        return [self.lookup[i] for i in items]
+
+    def decode(self, coded):
+        reverse = {v:k for k, v in self.lookup.items()}
+        try:
+            return [reverse[c] for c in coded]
+        except KeyError:
+            raise Exception('Encoder.decode() was passed integers that it cannot decode')
 
 #
 # In this exercise we will make an "Encoder" class
