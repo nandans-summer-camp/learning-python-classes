@@ -8,15 +8,19 @@ def test_patient_constructor():
 
 def test_patient_add_test_exists():
     patient = Patient('Foo', ['cough'])
+
+    patient.add_test('sars', False)
     patient.add_test('covid', False)
 
 def test_patient_has_covid():
     patient = Patient('Foo', ['cough'])
     patient.add_test('covid', False)
+    patient.add_test('sars', False)
     assert patient.has_covid() == 0.01
 
     patient = Patient('Foo', ['cough'])
     patient.add_test('covid', True)
+    patient.add_test('sars', False)
     assert patient.has_covid() == 0.99
 
     patient = Patient('Foo', ['happy'])
